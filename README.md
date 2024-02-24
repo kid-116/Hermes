@@ -22,11 +22,11 @@
 
 - [Data Quality Assessment for Improved Decision-Making: A Methodology for Small and Medium-Sized Enterprises](https://www.sciencedirect.com/science/article/pii/S2351978919301477)
 
-  Lisa C. Günther, Eduardo Colangelo, Hans-Hermann Wiendahl, Christian Bauer,
-  Data quality assessment for improved decision-making: a methodology for small and medium-sized enterprises,
-  https://doi.org/10.1016/j.promfg.2019.02.114.
+  Lisa C. Günther, Eduardo Colangelo, Hans-Hermann Wiendahl, Christian Bauer, Data quality assessment for improved decision-making: a methodology for small and medium-sized enterprises, https://doi.org/10.1016/j.promfg.2019.02.114.
 
 - [A Survey of Data Quality Measurement and Monitoring Tools](https://www.frontiersin.org/articles/10.3389/fdata.2022.850611/full)
+
+  Ehrlinger L and Wöß W (2022) A Survey of Data Quality Measurement and Monitoring Tools. Front. Big Data 5:850611. doi: 10.3389/fdata.2022.850611
 
 ## Links
 - [Drive](https://drive.google.com/drive/folders/1nZDxrEn82BJPJAxpljf-AHgAEe_o2oN1?usp=drive_link)
