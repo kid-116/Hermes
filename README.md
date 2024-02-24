@@ -1,3 +1,5 @@
+[![Lint](https://github.com/kid-116/Hermes/actions/workflows/lint.yml/badge.svg?branch=main)](https://github.com/kid-116/Hermes/actions/workflows/lint.yml)
+
 # Hermes
 
 ## Getting Started
