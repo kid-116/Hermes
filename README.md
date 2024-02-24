@@ -1,5 +1,40 @@
 # Hermes
 
+## Getting Started
+
+### Setup
+
+#### Linux
+Setup python virtual environment.
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r ./requirements.txt
+```
+
+### Running the App
+```bash
+streamlit run app.py
+```
+
+### Development
+
+#### Linting
+```bash
+pylint --recursive=y .
+```
+
+#### Formatting
+1. To get suggested formatting changes:
+    ```bash
+    yapf -d -r .
+    ```
+2. To apply the suggested changes in place:
+    ```bash
+    yapf -i -r .
+    ```
+
 ## Dataset
 - [MIMIC Clinical Database Demo](https://physionet.org/content/mimic-iv-demo/2.2/)
 

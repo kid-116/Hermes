@@ -1,0 +1,25 @@
+repos:
+  - repo: local
+    hooks:
+      - id: pylint
+        name: pylint
+        entry: pylint
+        language: system
+        types: [python]
+        args:
+          [
+            "--recursive=y",
+            ".",
+          ]
+
+      - id: yapf
+        name: yapf
+        entry: yapf
+        language: system
+        types: [python]
+        args:
+          [
+            "-r",
+            "-d",
+            "."
+          ]
