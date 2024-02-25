@@ -8,8 +8,8 @@ repos:
         types: [python]
         args:
           [
-            "--recursive=y",
-            ".",
+            '--recursive=y',
+            '.',
           ]
 
       - id: yapf
@@ -19,7 +19,7 @@ repos:
         types: [python]
         args:
           [
-            "-r",
-            "-d",
-            "."
+            '-r',
+            '-d',
+            '.'
           ]
