@@ -13,7 +13,8 @@
     source venv/bin/activate
     pip install -r ./requirements.txt
     ```
-2. Setup secrets.
+2. Save Firebase private key to `root/credentials.json`.
+3. Setup secrets.
     ```bash
     cp .stremlit/secrets.toml.sample .streamlit/secrets.toml
     ```

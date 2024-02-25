@@ -1,5 +1,6 @@
 # st.session_state variables.
 USER_INFO = 'user_info'
+USER_ID = 'user_id'
 
 # Google OAuth settings.
 AUTHORIZE_URL = 'https://accounts.google.com/o/oauth2/auth'
@@ -9,3 +10,5 @@ REFRESH_TOKEN_URL = 'https://oauth2.googleapis.com/token'
 REVOKE_TOKEN_URL = 'https://oauth2.googleapis.com/revoke'
 SCOPES = 'email'
 TOKEN_URL = 'https://oauth2.googleapis.com/token'
+
+GOOGLE_APPLICATION_CREDENTIALS = './credentials.json'
