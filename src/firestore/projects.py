@@ -6,17 +6,24 @@ from src.firestore import utils
 
 class Project:
 
-    def __init__(self, name, owner, folder):
+    def __init__(self, name, owner, folder, schema=None):
         self.name = name
         self.owner = owner
         self.folder = folder
+        self.schema = schema
 
     @staticmethod
     def from_dict(_dict):
-        return Project(_dict['name'], _dict['owner'], _dict['folder'])
+        return Project(_dict['name'], _dict['owner'], _dict['folder'],
+                       _dict.get('schema'))
 
     def to_dict(self):
-        return {'name': self.name, 'owner': self.owner, 'folder': self.folder}
+        return {
+            'name': self.name,
+            'owner': self.owner,
+            'folder': self.folder,
+            'schema': self.schema
+        }
 
     def __repr__(self):
         return str(self.to_dict())
@@ -41,7 +48,9 @@ def get_project(project_id):
     col = utils.get_collection('projects')
     doc = col.document(project_id).get()
     assert doc.to_dict()['owner'] == auth.get_active_user_id()
-    return doc
+    doc_dict = doc.to_dict()
+    doc_dict['id'] = doc.id
+    return doc_dict
 
 
 @auth.is_logged_in
@@ -49,3 +58,10 @@ def delete_project(project_id):
     get_project(project_id)
     col = utils.get_collection('projects')
     col.document(project_id).delete()
+
+
+@auth.is_logged_in
+def save_schema(project_id, schema):
+    get_project(project_id)
+    col = utils.get_collection('projects')
+    col.document(project_id).update({'schema': schema})

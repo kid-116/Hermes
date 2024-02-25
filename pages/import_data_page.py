@@ -3,6 +3,13 @@ import streamlit as st
 import constants
 from src import auth
 from src import data_import
+from src.firestore import projects
+
+
+def save_schema(project_id, schema):
+    projects.save_schema(project_id, schema)
+    project = projects.get_project(project_id)
+    st.session_state[constants.ACTIVATE_PROJECT] = project
 
 
 def import_page():
@@ -10,7 +17,12 @@ def import_page():
 
     project = st.session_state[constants.ACTIVATE_PROJECT]
 
-    clicked = st.button('Run')
+    if 'schema' in project:
+        for table in project['schema'].keys():
+            with st.expander(table):
+                st.json(project['schema'][table])
+
+    clicked = st.button('Run' if 'schema' not in project else 'Re-run')
 
     if clicked:
         status = st.status('Processing...', expanded=True)
@@ -43,6 +55,10 @@ def import_page():
         status.update(label='Import complete!',
                       state='complete',
                       expanded=False)
+
+        st.button('Save',
+                  on_click=save_schema,
+                  args=(project['id'], table_schemas))
 
 
 def import_page_wrapper():
