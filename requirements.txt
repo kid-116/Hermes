@@ -1,6 +1,8 @@
 firebase-admin
 pylint
 pylint[spelling]
+st-pages
 streamlit
 streamlit_oauth
+streamlit-card
 yapf

@@ -19,7 +19,7 @@ def logout():
     return True
 
 
-def navbar():
+def navbar(page=None):
     if constants.USER_INFO in st.session_state:
         email = st.session_state[constants.USER_INFO]['email']
         st.write(email)
@@ -29,6 +29,9 @@ def navbar():
 
         active_user = users.get_user(email)
         st.session_state[constants.USER_INFO][constants.USER_ID] = active_user
+
+        if page:
+            page()
     else:
         result = google_oauth2.authorize_button('Login', constants.REDIRECT_URI,
                                                 constants.SCOPES)
@@ -38,3 +41,17 @@ def navbar():
                                                     constants.CLIENT_ID)
             st.session_state[constants.USER_INFO] = userinfo
             st.rerun()
+
+
+def is_logged_in(func):
+
+    def inner(*args, **kwargs):
+        assert constants.USER_INFO in st.session_state
+        return func(*args, **kwargs)
+
+    return inner
+
+
+@is_logged_in
+def get_active_user_id():
+    return st.session_state[constants.USER_INFO][constants.USER_ID]
