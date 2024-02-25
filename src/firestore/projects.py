@@ -33,3 +33,18 @@ def get_user_projects():
     col = utils.get_collection('projects')
     return col.where(filter=base_query.FieldFilter(
         'owner', '==', auth.get_active_user_id())).stream()
+
+
+@auth.is_logged_in
+def get_project(project_id):
+    col = utils.get_collection('projects')
+    doc = col.document(project_id).get()
+    assert doc.to_dict()['owner'] == auth.get_active_user_id()
+    return doc
+
+
+@auth.is_logged_in
+def delete_project(project_id):
+    get_project(project_id)
+    col = utils.get_collection('projects')
+    col.document(project_id).delete()

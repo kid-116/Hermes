@@ -3,5 +3,5 @@ path = 'app.py'
 name = 'Home'
 
 [[pages]]
-path = 'pages/projects.py'
+path = 'pages/projects_page.py'
 name = 'Projects'

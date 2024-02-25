@@ -30,7 +30,17 @@ def list_projects():
         with st.spinner():
             for doc in projects.get_user_projects():
                 doc_dict = doc.to_dict()
-                streamlit_card.card(title=doc_dict['name'], text=doc.id)
+                project, actions = st.columns([3, 1])
+                with project:
+                    streamlit_card.card(title=doc_dict['name'], text=doc.id)
+                with actions:
+                    for _ in range(10):
+                        st.write('')
+                    with st.spinner():
+                        st.button('Delete',
+                                  on_click=projects.delete_project,
+                                  args=(doc.id,),
+                                  key=f'delete-project-{doc.id}')
 
 
 def projects_page():
