@@ -13,3 +13,6 @@ SCOPES = 'email'
 TOKEN_URL = 'https://oauth2.googleapis.com/token'
 
 GOOGLE_APPLICATION_CREDENTIALS = './credentials.json'
+
+# Configurations.
+DATAFRAME_DISP_SIZE = 100

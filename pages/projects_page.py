@@ -31,19 +31,16 @@ def list_projects():
     with csv_tab:
         with st.spinner():
             for doc in projects.get_user_projects():
-                doc_dict = doc.to_dict()
-                project_name, project_id = doc_dict['name'], doc.id
-                project, actions = st.columns([3, 1])
-                with project:
-                    project_activated = streamlit_card.card(title=project_name,
-                                                            text=project_id)
+                project = doc.to_dict()
+                project['id'] = doc.id
+                project_tab, actions = st.columns([3, 1])
+                with project_tab:
+                    project_activated = streamlit_card.card(
+                        title=project['name'], text=project['id'])
                     if project_activated:
-                        st.session_state[constants.ACTIVATE_PROJECT] = {
-                            'id': project_id,
-                            'name': project_name
-                        }
+                        st.session_state[constants.ACTIVATE_PROJECT] = project
                         st.info(
-                            f'Project - {project_name} ({project_id}) has been activated.'
+                            f"Project - {project['name']} ({project['id']}) has been activated."
                         )
                 with actions:
                     for _ in range(10):
@@ -51,8 +48,8 @@ def list_projects():
                     with st.spinner():
                         st.button('Delete',
                                   on_click=projects.delete_project,
-                                  args=(project_id,),
-                                  key=f'delete-project-{project_id}')
+                                  args=(project['id'],),
+                                  key=f"delete-project-{project['id']}")
 
 
 def projects_page():

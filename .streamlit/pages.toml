@@ -5,3 +5,7 @@ name = 'Home'
 [[pages]]
 path = 'pages/projects_page.py'
 name = 'Projects'
+
+[[pages]]
+path = 'pages/import_data.py'
+name = 'Import'
