@@ -7,5 +7,5 @@ path = 'pages/projects_page.py'
 name = 'Projects'
 
 [[pages]]
-path = 'pages/import_data.py'
-name = 'Import'
+path = 'pages/import_data_page.py'
+name = 'Data Import'
