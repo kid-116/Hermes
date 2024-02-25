@@ -16,6 +16,7 @@ google_oauth2 = streamlit_oauth.OAuth2Component(constants.CLIENT_ID,
 
 def logout():
     del st.session_state[constants.USER_INFO]
+    del st.session_state[constants.ACTIVATE_PROJECT]
     return True
 
 
@@ -23,6 +24,14 @@ def navbar(page=None):
     if constants.USER_INFO in st.session_state:
         email = st.session_state[constants.USER_INFO]['email']
         st.write(email)
+        if constants.ACTIVATE_PROJECT in st.session_state:
+            activate_project = st.session_state[constants.ACTIVATE_PROJECT]
+            st.write(f"{activate_project['name']} ({activate_project['id']})")
+        else:
+            st.write('No project selected')
+            refreshed = st.button('Refresh')
+            if refreshed:
+                st.rerun()
         logged_out = st.button('Logout', on_click=logout)
         if logged_out:
             st.rerun()

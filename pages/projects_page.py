@@ -1,6 +1,7 @@
 import streamlit as st
 import streamlit_card
 
+import constants
 from src import auth
 from src.firestore import projects
 
@@ -30,17 +31,27 @@ def list_projects():
         with st.spinner():
             for doc in projects.get_user_projects():
                 doc_dict = doc.to_dict()
+                project_name, project_id = doc_dict['name'], doc.id
                 project, actions = st.columns([3, 1])
                 with project:
-                    streamlit_card.card(title=doc_dict['name'], text=doc.id)
+                    project_activated = streamlit_card.card(title=project_name,
+                                                            text=project_id)
+                    if project_activated:
+                        st.session_state[constants.ACTIVATE_PROJECT] = {
+                            'id': project_id,
+                            'name': project_name
+                        }
+                        st.info(
+                            f'Project - {project_name} ({project_id}) has been activated.'
+                        )
                 with actions:
                     for _ in range(10):
                         st.write('')
                     with st.spinner():
                         st.button('Delete',
                                   on_click=projects.delete_project,
-                                  args=(doc.id,),
-                                  key=f'delete-project-{doc.id}')
+                                  args=(project_id,),
+                                  key=f'delete-project-{project_id}')
 
 
 def projects_page():
