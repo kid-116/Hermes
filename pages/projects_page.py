@@ -13,11 +13,12 @@ def add_project():
     with csv_tab:
         with st.form('project_add'):
             name = st.text_input('Name')
+            folder = st.text_input('Folder')
 
             with st.spinner():
                 submitted = st.form_submit_button('Add')
                 if submitted:
-                    projects.create_project(name)
+                    projects.create_project(name, folder)
 
     with sql_tab:
         st.write('Coming soon...')

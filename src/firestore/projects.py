@@ -6,25 +6,26 @@ from src.firestore import utils
 
 class Project:
 
-    def __init__(self, name, owner):
+    def __init__(self, name, owner, folder):
         self.name = name
         self.owner = owner
+        self.folder = folder
 
     @staticmethod
     def from_dict(_dict):
-        return Project(_dict['name'], _dict['owner'])
+        return Project(_dict['name'], _dict['owner'], _dict['folder'])
 
     def to_dict(self):
-        return {'name': self.name, 'owner': self.owner}
+        return {'name': self.name, 'owner': self.owner, 'folder': self.folder}
 
     def __repr__(self):
         return str(self.to_dict())
 
 
 @auth.is_logged_in
-def create_project(name):
+def create_project(name, folder):
     col = utils.get_collection('projects')
-    project = Project(name, auth.get_active_user_id())
+    project = Project(name, auth.get_active_user_id(), folder)
     col.add(project.to_dict())
 
 
