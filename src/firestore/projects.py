@@ -2,6 +2,7 @@ from google.cloud.firestore_v1 import base_query
 
 from src import auth
 from src.firestore import utils
+from . import views
 
 
 class Project:
@@ -33,7 +34,8 @@ class Project:
 def create_project(name, folder):
     col = utils.get_collection('projects')
     project = Project(name, auth.get_active_user_id(), folder)
-    col.add(project.to_dict())
+    _, project_ref = col.add(project.to_dict())
+    views.create_view('Base', project_ref.id)
 
 
 @auth.is_logged_in
