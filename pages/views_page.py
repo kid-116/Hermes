@@ -3,6 +3,7 @@ import streamlit as st
 
 import constants
 from src import auth
+from src import rules
 from src.firestore import views
 
 
@@ -22,8 +23,9 @@ def list_views():
         st.write(view.id)
 
         rules_df = pd.DataFrame(view_dict['rules'])
-        rules_df['comparator'] = rules_df['comparator'].astype(str)
-        _ = st.data_editor(
+        rules_df = rules_df.astype(str)
+
+        edited_rules = st.data_editor(
             rules_df,
             column_config={
                 'column':
@@ -37,10 +39,25 @@ def list_views():
                 'comparator':
                     st.column_config.TextColumn(label='Comparator')
             },
-            #   hide_index=True,
+            hide_index=True,
             num_rows='dynamic',
             column_order=['column', 'operator', 'comparator'],
             key=f'view-editor-{view.id}')
+
+        saved = st.button('Save', key=f'save-view-{view.id}')
+        if saved:
+            errors = rules.validate(edited_rules, project)
+
+            if not errors:
+                rules_json = edited_rules.to_dict()
+                rules_json = {
+                    column: list(values_dict.values())
+                    for column, values_dict in rules_json.items()
+                }
+                views.update_rules(view.id, rules_json)
+            else:
+                for error in errors:
+                    st.error(error)
 
 
 def view_add_form():

@@ -42,3 +42,9 @@ def get_project_views(project_id):
     col = utils.get_collection('views')
     return col.where(
         filter=base_query.FieldFilter('project_id', '==', project_id)).stream()
+
+
+@auth.is_logged_in
+def update_rules(view_id, rules):
+    col = utils.get_collection('views')
+    col.document(view_id).update({'rules': rules})
