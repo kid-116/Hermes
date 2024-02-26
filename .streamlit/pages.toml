@@ -9,3 +9,7 @@ name = 'Projects'
 [[pages]]
 path = 'pages/import_data_page.py'
 name = 'Data Import'
+
+[[pages]]
+path = 'pages/views_page.py'
+name = 'Views'
