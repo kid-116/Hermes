@@ -17,12 +17,14 @@ def import_page():
 
     project = st.session_state[constants.ACTIVATE_PROJECT]
 
-    if 'schema' in project:
+    schema_exists = 'schema' in project and project['schema']
+
+    if schema_exists:
         for table in project['schema'].keys():
             with st.expander(table):
                 st.json(project['schema'][table])
 
-    clicked = st.button('Run' if 'schema' not in project else 'Re-run')
+    clicked = st.button('Re-run' if schema_exists else 'Run')
 
     if clicked:
         status = st.status('Processing...', expanded=True)
