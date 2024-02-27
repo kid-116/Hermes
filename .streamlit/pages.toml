@@ -13,3 +13,7 @@ name = 'Data Import'
 [[pages]]
 path = 'pages/views_page.py'
 name = 'Views'
+
+[[pages]]
+path = 'pages/dq_metrics_page.py'
+name = 'DQ Metrics'
