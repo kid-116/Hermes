@@ -1,7 +1,7 @@
 # st.session_state variables.
-USER_INFO = 'user_info'
-USER_ID = 'user_id'
-ACTIVATE_PROJECT = 'activate_project'
+# USER_INFO = 'user_info'
+# USER_ID = 'user_id'
+# ACTIVATE_PROJECT = 'activate_project'
 
 # Google OAuth settings.
 AUTHORIZE_URL = 'https://accounts.google.com/o/oauth2/auth'

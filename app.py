@@ -6,7 +6,7 @@ from st_pages import show_pages_from_config
 import streamlit as st
 
 import constants
-from src import auth
+from widgets import page
 
 os.environ[
     'GOOGLE_APPLICATION_CREDENTIALS'] = constants.GOOGLE_APPLICATION_CREDENTIALS
@@ -19,8 +19,4 @@ if not firebase_admin._apps:  # pylint: disable=protected-access
 
 show_pages_from_config()
 
-st.set_page_config(page_title='Hermes', page_icon=':bar_chart:', layout='wide')
-
-st.title('Hermes')
-
-auth.navbar()
+page.Page(header='Hermes')

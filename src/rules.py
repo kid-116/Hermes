@@ -6,7 +6,7 @@ def validate(rules_df, project):
         del operator
         table, column = column.split('.')
 
-        _type = project['schema'][table][column]['type']
+        _type = project.schema[table][column]['type']
         try:
             match _type:
                 case 'INTEGER' | 'FLOAT':

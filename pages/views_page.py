@@ -1,28 +1,26 @@
 import pandas as pd
 import streamlit as st
 
-import constants
-from src import auth
+from widgets import page
 from src import rules
-from src.firestore import views
+from src.context import Context
 
 
 def list_views():
     st.subheader('Your Views')
 
-    project = st.session_state[constants.ACTIVATE_PROJECT]
+    project = Context.get_project()
 
     columns = [
-        f'{table}.{column}' for table in project['schema']
-        for column in project['schema'][table].keys()
+        f'{table}.{column}' for table in project.schema
+        for column in project.schema[table].keys()
     ]
 
-    for view in views.get_project_views(project['id']):
-        view_dict = view.to_dict()
-        st.markdown(f"#### {view_dict['name']}")
-        st.write(view.id)
+    for view in Context.view_db.get_project_views(project.id_):
+        st.markdown(f"#### {view.name}")
+        st.write(view.id_)
 
-        rules_df = pd.DataFrame(view_dict['rules'])
+        rules_df = pd.DataFrame(view.rules)
         rules_df = rules_df.astype(str)
 
         edited_rules = st.data_editor(
@@ -42,9 +40,9 @@ def list_views():
             hide_index=True,
             num_rows='dynamic',
             column_order=['column', 'operator', 'comparator'],
-            key=f'view-editor-{view.id}')
+            key=f'view-editor-{view.id_}')
 
-        saved = st.button('Save', key=f'save-view-{view.id}')
+        saved = st.button('Save', key=f'save-view-{view.id_}')
         if saved:
             errors = rules.validate(edited_rules, project)
 
@@ -54,7 +52,8 @@ def list_views():
                     column: list(values_dict.values())
                     for column, values_dict in rules_json.items()
                 }
-                views.update_rules(view.id, rules_json)
+                Context.view_db.update_rules(view, rules_json)
+                st.success('Rules updated.')
             else:
                 for error in errors:
                     st.error(error)
@@ -69,23 +68,17 @@ def view_add_form():
         with st.spinner():
             submitted = st.form_submit_button('Add')
         if submitted:
-            project = st.session_state[constants.ACTIVATE_PROJECT]
-            views.create_view(name, project['id'])
+            project = Context.get_project()
+            Context.view_db.add(name, project.id_)
 
 
 def views_page():
-    st.title('Views')
-
-    project = st.session_state.get(constants.ACTIVATE_PROJECT)
-    if not project:
-        st.error('Please select a project')
-        return
-    if not project['schema']:
-        st.error('Data import is not complete')
-        return
-
     view_add_form()
     list_views()
 
 
-auth.navbar(views_page)
+page.Page('Views',
+          views_page,
+          check_login=True,
+          check_active_project=True,
+          check_import=True)

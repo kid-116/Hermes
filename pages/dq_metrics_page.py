@@ -1,33 +1,22 @@
 import streamlit as st
 
-import constants
-from src import auth
-from src.firestore import views
+from src.context import Context
+from widgets import page
 
 
 def dq_metrics_page():
-    st.title('DQ Metrics')
-
-    project = st.session_state.get(constants.ACTIVATE_PROJECT)
-    if not project:
-        st.error('Please select a project')
-        return
-    if not project['schema']:
-        st.error('Data import is not complete')
-        return
-
-    project_views = list(views.get_project_views(project['id']))
-    options = [
-        f"{view.to_dict()['name']} - {view.id}" for view in project_views
-    ]
+    views = Context.view_db.get_project_views(Context.get_project().id_)
+    options = [f"{view.name} - {view.id_}" for view in views]
     selected_view = st.selectbox('Please select a view', options=options)
     _, selected_view_id = selected_view.split(' - ')
-    selected_view_doc = [
-        view for view in project_views if view.id == selected_view_id
-    ][0]
+    selected_view = [view for view in views if view.id_ == selected_view_id][0]
 
     st.subheader('Rules')
-    st.dataframe(selected_view_doc.to_dict()['rules'])
+    st.dataframe(selected_view.rules)
 
 
-auth.navbar(dq_metrics_page)
+page.Page('DQ Metrics',
+          dq_metrics_page,
+          check_login=True,
+          check_active_project=True,
+          check_import=True)

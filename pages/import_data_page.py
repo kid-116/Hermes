@@ -1,28 +1,26 @@
 import streamlit as st
 
 import constants
-from src import auth
+from src.context import Context
 from src import data_import
-from src.firestore import projects
+from widgets import page
 
 
 def save_schema(project_id, schema):
-    projects.save_schema(project_id, schema)
-    project = projects.get_project(project_id)
-    st.session_state[constants.ACTIVATE_PROJECT] = project
+    Context.project_db.save_schema(project_id, schema)
+    project = Context.project_db.get(project_id)
+    Context.activate_project(project)
 
 
 def import_page():
-    st.title('Data Import')
+    project = Context.get_project()
 
-    project = st.session_state[constants.ACTIVATE_PROJECT]
-
-    schema_exists = 'schema' in project and project['schema']
+    schema_exists = project.schema
 
     if schema_exists:
-        for table in project['schema'].keys():
+        for table in project.schema.keys():
             with st.expander(table):
-                st.json(project['schema'][table])
+                st.json(project.schema[table])
 
     clicked = st.button('Re-run' if schema_exists else 'Run')
 
@@ -30,12 +28,12 @@ def import_page():
         status = st.status('Processing...', expanded=True)
 
         status.write('Searching for tables...')
-        table_names = data_import.get_tables(project['folder'])
+        table_names = data_import.get_tables(project.folder)
 
         status.write('Loading tables...')
         table_data = {}
         for name in table_names:
-            table_data[name] = data_import.load_table(project['folder'], name)
+            table_data[name] = data_import.load_table(project.folder, name)
 
         status.write('Infering schema...')
         table_schemas = {}
@@ -60,14 +58,10 @@ def import_page():
 
         st.button('Save',
                   on_click=save_schema,
-                  args=(project['id'], table_schemas))
+                  args=(project.id_, table_schemas))
 
 
-def import_page_wrapper():
-    if constants.ACTIVATE_PROJECT in st.session_state:
-        import_page()
-    else:
-        st.error('No project selected')
-
-
-auth.navbar(import_page_wrapper)
+page.Page('Data Import',
+          content=import_page,
+          check_login=True,
+          check_active_project=True)
