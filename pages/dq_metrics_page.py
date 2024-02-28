@@ -23,11 +23,13 @@ def dq_metrics_page() -> None:
 
     st.subheader('Filtered Data')
     with st.spinner():
-        view_tables = rules.load_views(selected_view).items()
-        for _, table in view_tables:
+        tables = rules.load_views(selected_view).items()
+        for table_name, table in tables:
             st.dataframe(table.head(constants.DATAFRAME_DISP_SIZE))
 
-            metrics = TableMetrics(table)
+            project = Context.get_project()
+            assert project.schema
+            metrics = TableMetrics(table, project.schema[table_name])
 
             DisplayMetrics(3).render([metrics.get_n_rows()])
 
@@ -35,6 +37,13 @@ def dq_metrics_page() -> None:
                 col_cardinalities = metrics.get_all_column_cardinalities(
                 ).items()
                 for col_name, col_metrics in col_cardinalities:
+                    st.markdown(f'###### {col_name}')
+                    DisplayMetrics(5).render(col_metrics)
+
+            with st.expander('SC - Value Distributions'):
+                col_distributions = metrics.get_all_column_distributions(
+                ).items()
+                for col_name, col_metrics in col_distributions:
                     st.markdown(f'###### {col_name}')
                     DisplayMetrics(5).render(col_metrics)
 
