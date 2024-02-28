@@ -29,22 +29,29 @@ def dq_metrics_page() -> None:
 
             project = Context.get_project()
             assert project.schema
-            metrics = TableMetrics(table, project.schema[table_name])
+            schema = project.schema[table_name]
+            metrics = TableMetrics(table, schema)
 
             DisplayMetrics(3).render([metrics.get_n_rows()])
 
             with st.expander('SC - Cardinalities'):
-                col_cardinalities = metrics.get_all_column_cardinalities(
-                ).items()
-                for col_name, col_metrics in col_cardinalities:
-                    st.markdown(f'###### {col_name}')
+                col_name = st.selectbox(label='Column',
+                                        options=table.columns,
+                                        key=f'sc-c-col-{table_name}')
+                if col_name:
+                    col_metrics = metrics.get_column_cardinalities(col_name)
                     DisplayMetrics(5).render(col_metrics)
 
             with st.expander('SC - Value Distributions'):
-                col_distributions = metrics.get_all_column_distributions(
-                ).items()
-                for col_name, col_metrics in col_distributions:
-                    st.markdown(f'###### {col_name}')
+                col_name = st.selectbox(label='Column',
+                                        options=table.columns,
+                                        key=f'sc-d-col-{table_name}')
+
+                if col_name:
+                    if metrics.is_numeric(col_name):
+                        st.pyplot(metrics.get_column_hist(col_name).figure)
+
+                    col_metrics = metrics.get_column_distributions(col_name)
                     DisplayMetrics(5).render(col_metrics)
 
 

@@ -1,5 +1,7 @@
 firebase-admin
+matplotlib
 pandas
+seaborn
 st-pages
 streamlit
 streamlit_oauth

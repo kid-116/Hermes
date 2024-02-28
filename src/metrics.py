@@ -1,6 +1,6 @@
 import pandas as pd
+import seaborn as sns  # type: ignore[import-untyped]
 
-from models.projects import ColumnType
 from models.projects import TableSchema
 
 
@@ -52,14 +52,20 @@ class TableMetrics:
             metrics[col] = self.get_column_cardinalities(col)
         return metrics
 
+    # pylint: disable=fixme
+    # TODO: Compare ColumnType Enum instead of `name` property.
+    def is_numeric(self, col_name: str) -> bool:
+        return self.schema[col_name].type_.name in ['INTEGER', 'FLOAT']
+
+    # pylint: enable=fixme
+
     def get_column_distributions(self, col_name: str) -> list[Metric]:
         metrics = []
 
         col = self.df[col_name]
 
-        is_numeric = self.schema[col_name].type_ in [
-            ColumnType.INTEGER, ColumnType.FLOAT
-        ]
+        is_numeric = self.is_numeric(col_name)
+        print(col_name, self.schema[col_name].type_.name, is_numeric)
 
         metrics.append(
             Metric('Min',
@@ -77,3 +83,7 @@ class TableMetrics:
         for col in self.df.columns:
             metrics[col] = self.get_column_distributions(col)
         return metrics
+
+    def get_column_hist(self, col_name: str) -> sns.histplot:
+        assert self.is_numeric(col_name)
+        return sns.histplot(self.df[col_name])
