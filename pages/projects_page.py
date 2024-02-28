@@ -1,11 +1,11 @@
 import streamlit as st
-import streamlit_card
+import streamlit_card  # type: ignore[import-untyped]
 
 from src.context import Context
 from widgets import page
 
 
-def add_project():
+def add_project() -> None:
     st.subheader('Add a Project')
     csv_tab, sql_tab = st.tabs(['CSV', 'SQL'])
 
@@ -26,7 +26,7 @@ def add_project():
         st.write('Coming soon...')
 
 
-def list_projects():
+def list_projects() -> None:
     st.subheader('Your Projects')
     csv_tab, = st.tabs(['CSV'])
 
@@ -53,7 +53,7 @@ def list_projects():
                                   key=f"delete-project-{project.id_}")
 
 
-def projects_page():
+def projects_page() -> None:
     add_project()
     list_projects()
 

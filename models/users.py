@@ -4,12 +4,13 @@ from typing import Optional
 from firebase_admin import firestore  # type: ignore[import-untyped]
 from google.cloud.firestore_v1.base_query import FieldFilter
 
+import constants
 from .utils import Firestore
 
 
 class User:
 
-    def __init__(self, id_: Optional[str], email: str) -> None:
+    def __init__(self, id_: str, email: str) -> None:
         self.id_ = id_
         self.email = email
 
@@ -28,7 +29,7 @@ class UserDatabase(Firestore):
         super().__init__('users')
 
     def add(self, email: str) -> User:
-        user = User(None, email)
+        user = User(constants.DEFAULT_MODEL_PLACEHOLDER_ID, email)
         self.col_ref.add(user.to_firestore_dict())
         added_user = self.get(email)
         assert added_user is not None

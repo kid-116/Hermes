@@ -1,33 +1,27 @@
-from enum import Enum
 import os
 
 import pandas as pd
 
 import constants
+from models.projects import ColumnSchema
+from models.projects import ColumnType
+from models.projects import TableSchema
 
 
-class ColumnType(Enum):
-    INTEGER = 1, 'INTEGER'
-    FLOAT = 2, 'FLOAT'
-    STRING = 3, 'STRING'
-    ENUM = 4, 'ENUM'
-    UNKNOWN = 5, 'UNKNOWN'
-
-
-def get_tables(_dir):
+def get_tables(_dir: str) -> list[str]:
     files = os.listdir(_dir)
     return [file.strip('.csv') for file in files if file.endswith('.csv')]
 
 
-def load_table(_dir, name):
+def load_table(_dir: str, name: str) -> pd.DataFrame:
     return pd.read_csv(os.path.join(_dir, name + '.csv'))
 
 
-def get_columns(df):
-    return df.columns
+def get_columns(df: pd.DataFrame) -> list[str]:
+    return list(df.columns)
 
 
-def infer_column_type(df, column):
+def infer_column_type(df: pd.DataFrame, column: str) -> ColumnType:
     match df[column].dtype:
         case 'int64':
             return ColumnType.INTEGER
@@ -44,28 +38,29 @@ def infer_column_type(df, column):
             return ColumnType.UNKNOWN
 
 
-def get_schema(df):
+def get_table_schema(df: pd.DataFrame) -> TableSchema:
+    schema: TableSchema = {}
+
     columns = get_columns(df)
-    schema = {}
     for column in columns:
-        schema[column] = {}
+        type_ = infer_column_type(df, column)
+        values: list[str] = []
+        has_blanks = None
+        is_nullable = bool(df[column].isnull().sum() > 0)
+        is_unique = False
 
-        _type = infer_column_type(df, column)
-        schema[column]['type'] = _type
+        if type_ == ColumnType.ENUM:
+            values = list(df[column].unique())
 
-        if _type == ColumnType.ENUM:
-            schema[column]['values'] = list(df[column].unique())
-
-        schema[column]['nullable'] = bool(df[column].isnull().sum() > 0)
-        if _type in [ColumnType.ENUM, ColumnType.STRING]:
-            schema[column]['has_blanks'] = len(df[df[column] == ''].index) > 0
+        if type_ in [ColumnType.ENUM, ColumnType.STRING]:
+            has_blanks = len(df[df[column] == ''].index) > 0
 
         if len(df[column].unique()) == len(df):
-            schema[column]['unique'] = True
-        if not schema[column]['nullable'] and not 'has_blanks' in schema[
-                column] and 'unique' in schema[column]:
-            schema[column]['candidate_key'] = True
+            is_unique = True
 
-        schema[column]['type'] = str(_type.name)
+        is_candidate_key = not is_nullable and not has_blanks and is_unique
+
+        schema[column] = ColumnSchema(type_, is_unique, is_candidate_key,
+                                      is_nullable, has_blanks, values)
 
     return schema

@@ -1,28 +1,36 @@
 import streamlit as st
 
 import constants
+from models.projects import ProjectSchema
+from models.projects import TableSchema
 from src.context import Context
 from src import data_import
 from widgets import page
 
 
-def save_schema(project_id, schema):
+def save_schema(project_id: str, schema: ProjectSchema) -> None:
     Context.project_db.save_schema(project_id, schema)
     project = Context.project_db.get(project_id)
     Context.activate_project(project)
 
 
-def import_page():
+def display_schema(schema: TableSchema) -> None:
+    schema_json = {
+        column_name: column_schema.to_firestore_dict()
+        for column_name, column_schema in schema.items()
+    }
+    st.json(schema_json, expanded=False)
+
+
+def import_page() -> None:
     project = Context.get_project()
 
-    schema_exists = project.schema
-
-    if schema_exists:
+    if project.schema:
         for table in project.schema.keys():
             with st.expander(table):
-                st.json(project.schema[table])
+                display_schema(project.schema[table])
 
-    clicked = st.button('Re-run' if schema_exists else 'Run')
+    clicked = st.button('Re-run' if project.schema else 'Run')
 
     if clicked:
         status = st.status('Processing...', expanded=True)
@@ -38,7 +46,7 @@ def import_page():
         status.write('Infering schema...')
         table_schemas = {}
         for name in table_names:
-            table_schemas[name] = data_import.get_schema(table_data[name])
+            table_schemas[name] = data_import.get_table_schema(table_data[name])
 
         for name in table_names:
             st.subheader(name)
@@ -50,7 +58,7 @@ def import_page():
             with schema_tab:
                 st.markdown('##### Schema')
                 schema = table_schemas[name]
-                st.json(schema, expanded=False)
+                display_schema(schema)
 
         status.update(label='Import complete!',
                       state='complete',

@@ -1,5 +1,3 @@
-from typing import Optional
-
 import streamlit as st
 
 from models.projects import Project
@@ -20,22 +18,13 @@ from . import auth
 # pylint: enable=wrong-spelling-in-comment
 
 
-def init_db() -> None:
-    Context.user_db = UserDatabase()
-    Context.project_db = ProjectDatabase()
-    Context.view_db = ViewDatabase()
-
-
 class Context:
     USER = 'user'
     PROJECT = 'project'
 
-    user_db: Optional[UserDatabase] = None
-    project_db: Optional[ProjectDatabase] = None
-    view_db: Optional[ViewDatabase] = None
-
-    def __init__(self) -> None:
-        pass
+    user_db = UserDatabase()
+    project_db = ProjectDatabase()
+    view_db = ViewDatabase()
 
     @staticmethod
     def is_logged_in() -> bool:

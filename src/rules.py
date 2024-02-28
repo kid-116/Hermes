@@ -1,4 +1,10 @@
-def validate(rules_df, project):
+import pandas as pd
+
+from models.projects import Project
+from models.projects import ColumnType
+
+
+def validate(rules_df: pd.DataFrame, project: Project) -> list[str]:
     errors = []
 
     for _, row in rules_df.iterrows():
@@ -6,16 +12,17 @@ def validate(rules_df, project):
         del operator
         table, column = column.split('.')
 
-        _type = project.schema[table][column]['type']
+        assert project.schema
+        type_ = project.schema[table][column].type_
         try:
-            match _type:
-                case 'INTEGER' | 'FLOAT':
+            match type_:
+                case ColumnType.INTEGER | ColumnType.FLOAT:
                     float(comparator)
                 case _:
                     pass
         except:  # pylint: disable=bare-except
             errors.append(
-                f'Comparator value ({comparator}) is invalid for column {column} of type {_type}'
+                f'Comparator value ({comparator}) is invalid for column {column} of type {type_}'
             )
 
     return errors

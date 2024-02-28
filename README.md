@@ -27,11 +27,6 @@ streamlit run app.py
 
 ### Development
 
-#### Linting
-```bash
-pylint --recursive=y .
-```
-
 #### Formatting
 1. To get suggested formatting changes:
     ```bash
@@ -41,6 +36,16 @@ pylint --recursive=y .
     ```bash
     yapf -i -r .
     ```
+
+#### Linting
+```bash
+pylint --recursive=y .
+```
+
+#### Type Checking
+```bash
+mypy .
+```
 
 ## Dataset
 - [MIMIC Clinical Database Demo](https://physionet.org/content/mimic-iv-demo/2.2/)

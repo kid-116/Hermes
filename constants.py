@@ -1,8 +1,3 @@
-# st.session_state variables.
-# USER_INFO = 'user_info'
-# USER_ID = 'user_id'
-# ACTIVATE_PROJECT = 'activate_project'
-
 # Google OAuth settings.
 AUTHORIZE_URL = 'https://accounts.google.com/o/oauth2/auth'
 CLIENT_ID = '139114510789-cgqglp87pat6qb1agejr1851hpq6ahp5.apps.googleusercontent.com'
@@ -18,3 +13,5 @@ GOOGLE_APPLICATION_CREDENTIALS = './credentials.json'
 DATAFRAME_DISP_SIZE = 100
 ENUM_FRACTION_THRESHOLD = 0.05
 ENUM_N_THRESHOLD = 10
+
+DEFAULT_MODEL_PLACEHOLDER_ID = 'model-placeholder-id'

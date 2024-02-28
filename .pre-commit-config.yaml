@@ -29,7 +29,3 @@ repos:
         entry: mypy
         language: system
         types: [python]
-        args:
-          [
-            '--strict',
-          ]

@@ -6,11 +6,12 @@ from src import rules
 from src.context import Context
 
 
-def list_views():
+def list_views() -> None:
     st.subheader('Your Views')
 
     project = Context.get_project()
 
+    assert project.schema
     columns = [
         f'{table}.{column}' for table in project.schema
         for column in project.schema[table].keys()
@@ -47,10 +48,9 @@ def list_views():
             errors = rules.validate(edited_rules, project)
 
             if not errors:
-                rules_json = edited_rules.to_dict()
-                rules_json = {
-                    column: list(values_dict.values())
-                    for column, values_dict in rules_json.items()
+                rules_json: dict[str, list[str]] = {
+                    str(column): list(values_dict.values())
+                    for column, values_dict in edited_rules.to_dict().items()
                 }
                 Context.view_db.update_rules(view, rules_json)
                 st.success('Rules updated.')
@@ -59,7 +59,7 @@ def list_views():
                     st.error(error)
 
 
-def view_add_form():
+def view_add_form() -> None:
     st.subheader('Add a View')
 
     with st.form('view_add'):
@@ -72,7 +72,7 @@ def view_add_form():
             Context.view_db.add(name, project.id_)
 
 
-def views_page():
+def views_page() -> None:
     view_add_form()
     list_views()
 

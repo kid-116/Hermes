@@ -1,9 +1,9 @@
 from __future__ import annotations
-from typing import Optional
 
 from firebase_admin import firestore  # type: ignore[import-untyped]
 from google.cloud.firestore_v1.base_query import FieldFilter
 
+import constants
 from .utils import Firestore
 
 
@@ -11,7 +11,7 @@ class View:
 
     # pylint: disable=dangerous-default-value
     def __init__(self,
-                 id_: Optional[str],
+                 id_: str,
                  name: str,
                  project_id: str,
                  rules: dict[str, list[str]] = {
@@ -46,7 +46,7 @@ class ViewDatabase(Firestore):
         super().__init__('views')
 
     def add(self, name: str, project_id: str) -> None:
-        view = View(None, name, project_id)
+        view = View(constants.DEFAULT_MODEL_PLACEHOLDER_ID, name, project_id)
         self.col_ref.add(view.to_firestore_dict())
 
     def get_project_views(self, project_id: str) -> list[View]:
