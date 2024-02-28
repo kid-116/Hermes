@@ -1,3 +1,5 @@
+from typing import Callable, Optional
+
 import streamlit as st
 
 from src import context
@@ -8,12 +10,12 @@ class Page:  # pylint: disable=too-few-public-methods
 
     # pylint: disable=too-many-arguments
     def __init__(self,
-                 header,
-                 content=None,
-                 title='Hermes',
-                 check_login=False,
-                 check_active_project=False,
-                 check_import=False):
+                 header: str,
+                 content: Optional[Callable[[], None]] = None,
+                 title: str = 'Hermes',
+                 check_login: bool = False,
+                 check_active_project: bool = False,
+                 check_import: bool = False) -> None:
         context.init_db()
 
         st.set_page_config(page_title=title,

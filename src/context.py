@@ -1,21 +1,26 @@
+from typing import Optional
+
 import streamlit as st
 
+from models.projects import Project
 from models.projects import ProjectDatabase
+from models.users import User
 from models.users import UserDatabase
 from models.views import ViewDatabase
 from . import auth
 
+# pylint: disable=wrong-spelling-in-comment
+# def check_login(func: Callable) -> Callable:
 
-def check_login(func):
+#     def inner(*args, **kwargs):
+#         assert Context.is_logged_in()
+#         return func(*args, **kwargs)
 
-    def inner(*args, **kwargs):
-        assert Context.is_logged_in()
-        return func(*args, **kwargs)
-
-    return inner
+#     return inner
+# pylint: enable=wrong-spelling-in-comment
 
 
-def init_db():
+def init_db() -> None:
     Context.user_db = UserDatabase()
     Context.project_db = ProjectDatabase()
     Context.view_db = ViewDatabase()
@@ -25,52 +30,56 @@ class Context:
     USER = 'user'
     PROJECT = 'project'
 
-    user_db = None
-    project_db = None
-    view_db = None
+    user_db: Optional[UserDatabase] = None
+    project_db: Optional[ProjectDatabase] = None
+    view_db: Optional[ViewDatabase] = None
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     @staticmethod
-    def is_logged_in():
+    def is_logged_in() -> bool:
         return Context.USER in st.session_state
 
     @staticmethod
-    def project_activated():
+    def project_activated() -> bool:
         return Context.PROJECT in st.session_state
 
     @staticmethod
-    def project_import_completed():
+    def project_import_completed() -> bool:
         if not Context.project_activated():
             return False
         return bool(st.session_state[Context.PROJECT].schema)
 
     @staticmethod
-    def get_user():
-        return st.session_state[Context.USER]
+    def get_user() -> User:
+        user: User = st.session_state[Context.USER]
+        return user
 
     @staticmethod
-    def get_project():
-        return st.session_state[Context.PROJECT]
+    def get_project() -> Project:
+        project: Project = st.session_state[Context.PROJECT]
+        return project
 
     @staticmethod
-    def logout():
+    def logout() -> bool:
         del st.session_state[Context.USER]
         if Context.PROJECT in st.session_state:
             del st.session_state[Context.PROJECT]
+
         return True
 
     @staticmethod
-    def login():
+    def login() -> None:
         userinfo = auth.login()
         if userinfo:
             email = userinfo['email']
-            user = Context.user_db.get(email)
+            assert isinstance(email, str)
+            user = Context.user_db.get(email) if Context.user_db else None
             if not user:
-                user = Context.user_db.add(email)
+                user = Context.user_db.add(email) if Context.user_db else None
             st.session_state[Context.USER] = user
 
     @staticmethod
-    def activate_project(project):
+    def activate_project(project: Project) -> None:
         st.session_state[Context.PROJECT] = project

@@ -5,7 +5,7 @@ from src import context
 
 class Navbar:  # pylint: disable=too-few-public-methods
 
-    def __init__(self):
+    def __init__(self) -> None:
         if context.Context.is_logged_in():
             user = context.Context.get_user()
             st.write(user.email)
@@ -20,8 +20,9 @@ class Navbar:  # pylint: disable=too-few-public-methods
             if refreshed:
                 st.rerun()
 
-            logged_out = st.button('Logout', on_click=context.Context.logout)
-            if logged_out:
+            clicked = st.button('Logout')
+            if clicked:
+                context.Context.logout()
                 st.rerun()
         else:
             success = context.Context.login()

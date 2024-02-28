@@ -1,9 +1,12 @@
 firebase-admin
 pandas
-pylint
-pylint[spelling]
 st-pages
 streamlit
 streamlit_oauth
 streamlit-card
+
+# Dev dependencies.
+mypy
+pylint
+pylint[spelling]
 yapf

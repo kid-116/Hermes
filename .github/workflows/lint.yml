@@ -30,3 +30,6 @@ jobs:
       - name: Run yapf
         run: |
           yapf -d -r .
+      - name: Run mypy
+        run: |
+          mypy --strict app.py

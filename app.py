@@ -1,6 +1,6 @@
 import os
 
-import firebase_admin
+import firebase_admin  # type: ignore[import-untyped]
 from firebase_admin import credentials
 from st_pages import show_pages_from_config
 import streamlit as st

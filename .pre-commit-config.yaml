@@ -1,6 +1,18 @@
 repos:
   - repo: local
     hooks:
+      - id: yapf
+        name: yapf
+        entry: yapf
+        language: system
+        types: [python]
+        args:
+          [
+            '-r',
+            '-q',
+            '.'
+          ]
+
       - id: pylint
         name: pylint
         entry: pylint
@@ -12,14 +24,12 @@ repos:
             '.',
           ]
 
-      - id: yapf
-        name: yapf
-        entry: yapf
+      - id: mypy
+        name: mypy
+        entry: mypy
         language: system
         types: [python]
         args:
           [
-            '-r',
-            '-d',
-            '.'
+            '--strict',
           ]
