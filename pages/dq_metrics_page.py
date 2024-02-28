@@ -20,8 +20,9 @@ def dq_metrics_page() -> None:
     DisplayRules(selected_view).render()
 
     st.subheader('Filtered Data')
-    for _, table in rules.load_views(selected_view).items():
-        st.dataframe(table.head(constants.DATAFRAME_DISP_SIZE))
+    with st.spinner():
+        for _, table in rules.load_views(selected_view).items():
+            st.dataframe(table.head(constants.DATAFRAME_DISP_SIZE))
 
 
 Page('DQ Metrics',
