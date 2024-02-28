@@ -26,6 +26,7 @@ def import_page() -> None:
     project = Context.get_project()
 
     if project.schema:
+        st.subheader('Schema')
         for table in project.schema.keys():
             with st.expander(table):
                 display_schema(project.schema[table])

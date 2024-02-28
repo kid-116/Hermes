@@ -5,6 +5,7 @@ import pandas as pd
 import constants
 from models.projects import ColumnSchema
 from models.projects import ColumnType
+from models.projects import Project
 from models.projects import TableSchema
 
 
@@ -19,6 +20,14 @@ def load_table(_dir: str, name: str) -> pd.DataFrame:
 
 def get_columns(df: pd.DataFrame) -> list[str]:
     return list(df.columns)
+
+
+def load_project_tables(project: Project) -> dict[str, pd.DataFrame]:
+    tables = {}
+    table_names = get_tables(project.folder)
+    for table_name in table_names:
+        tables[table_name] = load_table(project.folder, table_name)
+    return tables
 
 
 def infer_column_type(df: pd.DataFrame, column: str) -> ColumnType:

@@ -1,7 +1,10 @@
 import streamlit as st
 
+import constants
+from src import rules
 from src.context import Context
-from widgets import page
+from widgets.disp_rules import DisplayRules
+from widgets.page import Page
 
 
 def dq_metrics_page() -> None:
@@ -14,11 +17,15 @@ def dq_metrics_page() -> None:
     selected_view = [view for view in views if view.id_ == selected_view_id][0]
 
     st.subheader('Rules')
-    st.dataframe(selected_view.rules)
+    DisplayRules(selected_view).render()
+
+    st.subheader('Filtered Data')
+    for _, table in rules.load_views(selected_view).items():
+        st.dataframe(table.head(constants.DATAFRAME_DISP_SIZE))
 
 
-page.Page('DQ Metrics',
-          dq_metrics_page,
-          check_login=True,
-          check_active_project=True,
-          check_import=True)
+Page('DQ Metrics',
+     dq_metrics_page,
+     check_login=True,
+     check_active_project=True,
+     check_import=True)

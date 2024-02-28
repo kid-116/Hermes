@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from firebase_admin import firestore  # type: ignore[import-untyped]
 from google.cloud.firestore_v1.base_query import FieldFilter
+import pandas as pd
 
 import constants
 from .utils import Firestore
@@ -39,6 +40,11 @@ class View:
             'rules': self.rules,
         }
 
+    def get_rules_df(self) -> pd.DataFrame:
+        rules_df = pd.DataFrame(self.rules)
+        rules_df = rules_df.astype(str)
+        return rules_df
+
 
 class ViewDatabase(Firestore):
 
@@ -55,5 +61,9 @@ class ViewDatabase(Firestore):
                                    ).stream()
         return [View.from_doc(doc) for doc in stream]
 
-    def update_rules(self, view: View, rules: dict[str, list[str]]) -> None:
-        self.col_ref.document(view.id_).update({'rules': rules})
+    def update_rules(self, view: View, rules_df: pd.DataFrame) -> None:
+        rules_json: dict[str, list[str]] = {
+            str(column): list(values_dict.values())
+            for column, values_dict in rules_df.to_dict().items()
+        }
+        self.col_ref.document(view.id_).update({'rules': rules_json})
