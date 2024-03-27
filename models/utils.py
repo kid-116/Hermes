@@ -8,9 +8,6 @@ import streamlit as st
 
 import constants
 
-os.environ[
-    'GOOGLE_APPLICATION_CREDENTIALS'] = constants.GOOGLE_APPLICATION_CREDENTIALS
-
 
 class Firestore:  # pylint: disable=too-few-public-methods
 
