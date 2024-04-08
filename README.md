@@ -19,10 +19,19 @@
     cp .stremlit/secrets.toml.sample .streamlit/secrets.toml
     ```
     Now, fill in the secrets.
+4. For test environment, authorize gcloud for the `hermes-415313` project.
+    ```bash
+    gcloud auth login
+    ```
 
 ### Running the App
 ```bash
 streamlit run app.py
+```
+
+If it is not possible to authorize gcloud as show in step above, execute the following:
+```bash
+STREAMLIT_USE_CREDENTIALS=True streamlit run app.py
 ```
 
 ### Development
