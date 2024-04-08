@@ -3,3 +3,5 @@ venv/
 
 .streamlit/secrets.toml
 credentials.json
+
+data/
