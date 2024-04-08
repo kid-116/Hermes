@@ -3,6 +3,7 @@ csvkit
 firebase-admin
 matplotlib
 pandas
+plotly
 python-dateutil
 seaborn
 st-pages
