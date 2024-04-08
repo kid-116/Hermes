@@ -34,14 +34,15 @@ class TableMetrics:
             Metric('# Nulls', str(n_nulls),
                    'Number of null values in the column'))
         metrics.append(
-            Metric('% Nulls', f'{n_nulls / len(self.df):.2f} %',
+            Metric('% Nulls', f'{n_nulls / len(self.df) * 100:.2f} %',
                    'Number of unique values in the column'))
 
         metrics.append(
             Metric('# Unique', str(len(col.unique())),
                    'Number of unique values in the column'))
         metrics.append(
-            Metric('% Unique', f'{len(col.unique()) / len(self.df):.2f} %',
+            Metric('% Unique',
+                   f'{len(col.unique()) / len(self.df) * 100:.2f} %',
                    'Percentage of unique values in the column'))
 
         return metrics
@@ -68,12 +69,10 @@ class TableMetrics:
         print(col_name, self.schema[col_name].type_.name, is_numeric)
 
         metrics.append(
-            Metric('Min',
-                   str(col.min()) if is_numeric else 'NA',
+            Metric('Min', f'{col.min():.2f}' if is_numeric else 'NA',
                    'Minimum value in the column'))
         metrics.append(
-            Metric('Max',
-                   str(col.max()) if is_numeric else 'NA',
+            Metric('Max', f'{col.max():.2f}' if is_numeric else 'NA',
                    'Maximum value in the column'))
 
         return metrics
