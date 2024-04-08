@@ -50,13 +50,10 @@ def dq_metrics_page() -> None:
                 if col_name:
                     if metrics.is_numeric(col_name):
                         st.pyplot(metrics.get_column_hist(col_name).figure)
+                        st.pyplot(metrics.get_benford_distribution(col_name).figure)
 
                     col_metrics = metrics.get_column_distributions(col_name)
-                    DisplayMetrics(5).render(col_metrics)
+                    DisplayMetrics(2).render(col_metrics)
 
 
-Page('DQ Metrics',
-     dq_metrics_page,
-     check_login=True,
-     check_active_project=True,
-     check_import=True)
+Page('DQ Metrics', dq_metrics_page, check_login=True, check_active_project=True, check_import=True)

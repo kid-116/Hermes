@@ -51,8 +51,7 @@ class ColumnSchema:
     # pylint: enable=too-many-arguments
 
     @staticmethod
-    def from_firestore_dict(
-            dict_: dict[str, str | bool | list[str]]) -> ColumnSchema:
+    def from_firestore_dict(dict_: dict[str, str | bool | list[str]]) -> ColumnSchema:
         type_ = dict_['type']
         assert isinstance(type_, str)
         is_unique = dict_['is_unique']
@@ -65,8 +64,8 @@ class ColumnSchema:
         assert has_blanks is None or isinstance(has_blanks, bool)
         values = dict_['values']
         assert isinstance(values, list)
-        return ColumnSchema(ColumnType[type_], is_unique, is_candidate_key,
-                            is_nullable, has_blanks, values)
+        return ColumnSchema(ColumnType[type_], is_unique, is_candidate_key, is_nullable, has_blanks,
+                            values)
 
     def to_firestore_dict(self) -> dict[str, str | bool | list[str] | None]:
         return {
@@ -87,8 +86,7 @@ ProjectSchema = dict[str, TableSchema]
 
 
 def project_schema_to_dict(
-    schema: ProjectSchema
-) -> dict[str, dict[str, dict[str, str | bool | list[str] | None]]]:
+        schema: ProjectSchema) -> dict[str, dict[str, dict[str, str | bool | list[str] | None]]]:
     return {
         table_name: {
             column_name: column_schema.to_firestore_dict()
@@ -123,19 +121,16 @@ class Project:
                 for column_name, column_schema in table_schema.items()
             } for table_name, table_schema in doc_dict['schema'].items()
         }
-        return Project(doc.id, doc_dict['name'], doc_dict['owner'],
-                       doc_dict['folder'], schema)
+        return Project(doc.id, doc_dict['name'], doc_dict['owner'], doc_dict['folder'], schema)
 
     def to_firestore_dict(
-        self
-    ) -> dict[str, str | dict[str, dict[str, dict[str, str | bool | list[str] |
-                                                  None]]]]:
+            self
+    ) -> dict[str, str | dict[str, dict[str, dict[str, str | bool | list[str] | None]]]]:
         return {
             'name': self.name,
             'owner': self.owner,
             'folder': self.folder,
-            'schema': project_schema_to_dict(self.schema)
-                      if self.schema else {}
+            'schema': project_schema_to_dict(self.schema) if self.schema else {}
         }
 
 
@@ -145,15 +140,14 @@ class ProjectDatabase(Firestore):
         super().__init__('projects')
 
     def add(self, name: str, user_id: str, folder: str) -> Project:
-        project = Project(constants.DEFAULT_MODEL_PLACEHOLDER_ID, name, user_id,
-                          folder)
+        project = Project(constants.DEFAULT_MODEL_PLACEHOLDER_ID, name, user_id, folder)
         _, project_ref = self.col_ref.add(project.to_firestore_dict())
         return Project.from_doc(project_ref.get())
 
     def get_user_projects(self, user_id: str) -> list[Project]:
-        stream = self.col_ref.where(filter=FieldFilter(
-            'owner', '==', user_id)  # type: ignore[no-untyped-call]
-                                   ).stream()
+        stream = self.col_ref.where(
+            filter=FieldFilter('owner', '==', user_id)  # type: ignore[no-untyped-call]
+        ).stream()
         return [Project.from_doc(doc) for doc in stream]
 
     def get(self, project_id: str) -> Project:
@@ -164,5 +158,4 @@ class ProjectDatabase(Firestore):
         self.col_ref.document(project_id).delete()
 
     def save_schema(self, project_id: str, schema: ProjectSchema) -> None:
-        self.col_ref.document(project_id).update(
-            {'schema': project_schema_to_dict(schema)})
+        self.col_ref.document(project_id).update({'schema': project_schema_to_dict(schema)})

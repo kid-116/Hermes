@@ -19,13 +19,10 @@ class DisplayRules:  # pylint: disable=too-few-public-methods
         ]
         self.column_config = {
             'column':
-                st.column_config.SelectboxColumn(label='Column',
-                                                 options=columns,
-                                                 required=True),
+                st.column_config.SelectboxColumn(label='Column', options=columns, required=True),
             'operator':
-                st.column_config.SelectboxColumn(
-                    label='Operator',
-                    options=['==', '>', '>=', '<', '<=', '!=']),
+                st.column_config.SelectboxColumn(label='Operator',
+                                                 options=['==', '>', '>=', '<', '<=', '!=']),
             'comparator':
                 st.column_config.TextColumn(label='Comparator')
         }

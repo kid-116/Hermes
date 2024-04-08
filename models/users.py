@@ -36,9 +36,9 @@ class UserDatabase(Firestore):
         return added_user
 
     def get(self, email: str) -> Optional[User]:
-        docs = self.col_ref.where(filter=FieldFilter(
-            'email', '==', email)  # type: ignore[no-untyped-call]
-                                 ).get()
+        docs = self.col_ref.where(
+            filter=FieldFilter('email', '==', email)  # type: ignore[no-untyped-call]
+        ).get()
         assert len(docs) <= 1
         if not docs:
             return None

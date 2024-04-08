@@ -35,8 +35,7 @@ def validate(rules_df: pd.DataFrame, project: Project) -> list[str]:
                     pass
         except:  # pylint: disable=bare-except
             errors.append(
-                f'Comparator value ({comparator}) is invalid for column {column} of type {type_}'
-            )
+                f'Comparator value ({comparator}) is invalid for column {column} of type {type_}')
 
     return errors
 
@@ -48,8 +47,7 @@ def load_views(view: View) -> dict[str, pd.DataFrame]:
 
     for (table, column, operator, comparator) in get_rules(view.get_rules_df()):
         cmp: Any = str(comparator)
-        mapper = projects.COLUMN_TYPE_TO_PYTHONIC_TYPE_MAPPERS[
-            project.schema[table][column].type_]
+        mapper = projects.COLUMN_TYPE_TO_PYTHONIC_TYPE_MAPPERS[project.schema[table][column].type_]
         cmp = mapper(comparator)
 
         match operator:

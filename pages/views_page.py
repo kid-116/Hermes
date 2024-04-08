@@ -47,8 +47,4 @@ def views_page() -> None:
     list_views()
 
 
-page.Page('Views',
-          views_page,
-          check_login=True,
-          check_active_project=True,
-          check_import=True)
+page.Page('Views', views_page, check_login=True, check_active_project=True, check_import=True)

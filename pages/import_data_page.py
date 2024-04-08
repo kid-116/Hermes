@@ -54,23 +54,15 @@ def import_page() -> None:
             data_tab, schema_tab = st.columns([3, 1])
             with data_tab:
                 st.markdown('##### Data')
-                st.dataframe(
-                    table_data[name].head(constants.DATAFRAME_DISP_SIZE),)
+                st.dataframe(table_data[name].head(constants.DATAFRAME_DISP_SIZE),)
             with schema_tab:
                 st.markdown('##### Schema')
                 schema = table_schemas[name]
                 display_schema(schema)
 
-        status.update(label='Import complete!',
-                      state='complete',
-                      expanded=False)
+        status.update(label='Import complete!', state='complete', expanded=False)
 
-        st.button('Save',
-                  on_click=save_schema,
-                  args=(project.id_, table_schemas))
+        st.button('Save', on_click=save_schema, args=(project.id_, table_schemas))
 
 
-page.Page('Data Import',
-          content=import_page,
-          check_login=True,
-          check_active_project=True)
+page.Page('Data Import', content=import_page, check_login=True, check_active_project=True)

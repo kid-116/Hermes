@@ -26,9 +26,8 @@ def get_columns(df: pd.DataFrame) -> list[str]:
     return list(df.columns)
 
 
-def load_project_tables(
-        project: Project,
-        schema: Optional[ProjectSchema] = None) -> dict[str, pd.DataFrame]:
+def load_project_tables(project: Project,
+                        schema: Optional[ProjectSchema] = None) -> dict[str, pd.DataFrame]:
     tables = {}
     table_names = get_tables(project.folder)
     for table_name in table_names:
@@ -37,8 +36,8 @@ def load_project_tables(
         for table_name, table_schema in schema.items():
             for column_name, column_schema in table_schema.items():
                 if column_schema.type_ == ColumnType.DATETIME:
-                    tables[table_name][column_name] = tables[table_name][
-                        column_name].apply(utils.datetime_parser)
+                    tables[table_name][column_name] = tables[table_name][column_name].apply(
+                        utils.datetime_parser)
     return tables
 
 
@@ -90,7 +89,7 @@ def get_table_schema(df: pd.DataFrame) -> TableSchema:
 
         is_candidate_key = not is_nullable and not has_blanks and is_unique
 
-        schema[column] = ColumnSchema(type_, is_unique, is_candidate_key,
-                                      is_nullable, has_blanks, values)
+        schema[column] = ColumnSchema(type_, is_unique, is_candidate_key, is_nullable, has_blanks,
+                                      values)
 
     return schema

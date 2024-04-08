@@ -16,9 +16,7 @@ class Page:  # pylint: disable=too-few-public-methods
                  check_login: bool = False,
                  check_active_project: bool = False,
                  check_import: bool = False) -> None:
-        st.set_page_config(page_title=title,
-                           page_icon=":bar_chart:",
-                           layout="wide")
+        st.set_page_config(page_title=title, page_icon=":bar_chart:", layout="wide")
 
         navbar.Navbar()
 

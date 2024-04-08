@@ -17,9 +17,7 @@ def add_project() -> None:
             with st.spinner():
                 submitted = st.form_submit_button('Add')
                 if submitted:
-                    project = Context.project_db.add(name,
-                                                     Context.get_user().id_,
-                                                     folder)
+                    project = Context.project_db.add(name, Context.get_user().id_, folder)
                     Context.view_db.add('Base', project.id_)
 
     with sql_tab:
@@ -32,17 +30,13 @@ def list_projects() -> None:
 
     with csv_tab:
         with st.spinner():
-            for project in Context.project_db.get_user_projects(
-                    Context.get_user().id_):
+            for project in Context.project_db.get_user_projects(Context.get_user().id_):
                 project_tab, actions = st.columns([3, 1])
                 with project_tab:
-                    project_activated = streamlit_card.card(title=project.name,
-                                                            text=project.id_)
+                    project_activated = streamlit_card.card(title=project.name, text=project.id_)
                     if project_activated:
                         Context.activate_project(project)
-                        st.info(
-                            f"Project - {project.name} ({project.id_}) has been activated."
-                        )
+                        st.info(f"Project - {project.name} ({project.id_}) has been activated.")
                 with actions:
                     for _ in range(10):
                         st.write('')
