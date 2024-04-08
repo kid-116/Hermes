@@ -1,11 +1,14 @@
 from __future__ import annotations
 from enum import Enum
+from typing import Any
+from typing import Callable
 from typing import Optional
 
 from google.cloud.firestore_v1.base_query import FieldFilter
 from firebase_admin import firestore  # type: ignore[import-untyped]
 
 import constants
+from src import utils
 from .utils import Firestore
 
 
@@ -16,6 +19,16 @@ class ColumnType(Enum):
     ENUM = 4, 'ENUM'
     UNKNOWN = 5, 'UNKNOWN'
     DATETIME = 6, 'DATETIME'
+
+
+COLUMN_TYPE_TO_PYTHONIC_TYPE_MAPPERS: dict[ColumnType, Callable[[str], Any]] = {
+    ColumnType.INTEGER: int,
+    ColumnType.FLOAT: float,
+    ColumnType.STRING: str,
+    ColumnType.ENUM: str,
+    ColumnType.UNKNOWN: str,
+    ColumnType.DATETIME: utils.datetime_parser,
+}
 
 
 class ColumnSchema:

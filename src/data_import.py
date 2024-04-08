@@ -1,15 +1,16 @@
 import os
-from typing import Any
+from typing import Optional
 from typing import Sequence
 
-from dateutil import parser as dateutil_parser
 import pandas as pd
 
 import constants
 from models.projects import ColumnSchema
 from models.projects import ColumnType
 from models.projects import Project
+from models.projects import ProjectSchema
 from models.projects import TableSchema
+from . import utils
 
 
 def get_tables(_dir: str) -> list[str]:
@@ -25,19 +26,25 @@ def get_columns(df: pd.DataFrame) -> list[str]:
     return list(df.columns)
 
 
-def load_project_tables(project: Project) -> dict[str, pd.DataFrame]:
+def load_project_tables(
+        project: Project,
+        schema: Optional[ProjectSchema] = None) -> dict[str, pd.DataFrame]:
     tables = {}
     table_names = get_tables(project.folder)
     for table_name in table_names:
         tables[table_name] = load_table(project.folder, table_name)
+    if schema:
+        for table_name, table_schema in schema.items():
+            for column_name, column_schema in table_schema.items():
+                if column_schema.type_ == ColumnType.DATETIME:
+                    tables[table_name][column_name] = tables[table_name][
+                        column_name].apply(utils.datetime_parser)
     return tables
 
 
-def check_if_datetime(column: Sequence[Any]) -> bool:
+def check_if_datetime(column: Sequence[str]) -> bool:
     for val in column:
-        try:
-            dateutil_parser.parse(val)
-        except dateutil_parser.ParserError:
+        if not utils.is_datetime(val):
             return False
     return True
 
