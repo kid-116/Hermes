@@ -27,3 +27,8 @@ icon = '⤴️'
 path = 'pages/dq_metrics_page.py'
 name = 'DQ Metrics'
 icon = '📊'
+
+[[pages]]
+path = 'pages/assessment_lenses.py'
+name = 'Assessment Lenses'
+icon = '🔎'

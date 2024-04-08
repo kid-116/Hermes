@@ -3,6 +3,7 @@ from typing import Any
 
 from benfordslaw import benfordslaw  # type: ignore[import-untyped]
 import pandas as pd
+import plotly.express as px  # type: ignore[import-untyped]
 import seaborn as sns  # type: ignore[import-untyped]
 
 from models.projects import TableSchema
@@ -103,3 +104,12 @@ class TableMetrics:
     def get_column_hist(self, col_name: str) -> sns.histplot:
         assert self.is_numeric(col_name)
         return sns.histplot(self.df[col_name])
+
+
+def get_boxplot(col: pd.Series[float | int]) -> sns.boxplot:
+    return px.box(y=col)
+
+
+def get_scatterplot(table_df: pd.DataFrame, x_col: str, y_col: str) -> px.scatter:
+    # return sns.scatterplot(x=table_df[x_col], y=table_df[y_col])
+    return px.scatter(x=table_df[x_col], y=table_df[y_col])
