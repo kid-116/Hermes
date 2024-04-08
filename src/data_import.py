@@ -11,7 +11,7 @@ from models.projects import TableSchema
 
 def get_tables(_dir: str) -> list[str]:
     files = os.listdir(_dir)
-    return [file.strip('.csv') for file in files if file.endswith('.csv')]
+    return [file[:-4] for file in files if file.endswith('.csv')]
 
 
 def load_table(_dir: str, name: str) -> pd.DataFrame:
