@@ -21,7 +21,7 @@
     Now, fill in the secrets.
 4. For test environment, authorize gcloud for the `hermes-415313` project.
     ```bash
-    gcloud auth login
+    gcloud auth application-default login
     ```
 
 ### Running the App
