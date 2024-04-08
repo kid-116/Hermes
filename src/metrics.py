@@ -65,13 +65,15 @@ class TableMetrics:
 
         col = self.df[col_name]
 
+        is_datetime = self.schema[col_name].type_.name == 'DATETIME'
         is_numeric = self.is_numeric(col_name)
+        is_viable = is_datetime or is_numeric
 
         metrics.append(
-            Metric('Min', f'{col.min():.2f}' if is_numeric else 'NA',
+            Metric('Min', f'{col.min()}' if is_viable else 'NA',
                    'Minimum value in the column'))
         metrics.append(
-            Metric('Max', f'{col.max():.2f}' if is_numeric else 'NA',
+            Metric('Max', f'{col.max()}' if is_viable else 'NA',
                    'Maximum value in the column'))
 
         return metrics
