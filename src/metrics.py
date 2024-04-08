@@ -66,7 +66,6 @@ class TableMetrics:
         col = self.df[col_name]
 
         is_numeric = self.is_numeric(col_name)
-        print(col_name, self.schema[col_name].type_.name, is_numeric)
 
         metrics.append(
             Metric('Min', f'{col.min():.2f}' if is_numeric else 'NA',

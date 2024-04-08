@@ -1,5 +1,8 @@
 import os
+from typing import Any
+from typing import Sequence
 
+from dateutil import parser as dateutil_parser
 import pandas as pd
 
 import constants
@@ -30,6 +33,15 @@ def load_project_tables(project: Project) -> dict[str, pd.DataFrame]:
     return tables
 
 
+def check_if_datetime(column: Sequence[Any]) -> bool:
+    for val in column:
+        try:
+            dateutil_parser.parse(val)
+        except dateutil_parser.ParserError:
+            return False
+    return True
+
+
 def infer_column_type(df: pd.DataFrame, column: str) -> ColumnType:
     match df[column].dtype:
         case 'int64':
@@ -37,6 +49,8 @@ def infer_column_type(df: pd.DataFrame, column: str) -> ColumnType:
         case 'float64':
             return ColumnType.FLOAT
         case 'object':
+            if check_if_datetime(df[column]):
+                return ColumnType.DATETIME
             n_unique = len(df[column].unique())
             if n_unique / len(
                     df

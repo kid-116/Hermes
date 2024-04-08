@@ -15,6 +15,7 @@ class ColumnType(Enum):
     STRING = 3, 'STRING'
     ENUM = 4, 'ENUM'
     UNKNOWN = 5, 'UNKNOWN'
+    DATETIME = 6, 'DATETIME'
 
 
 class ColumnSchema:

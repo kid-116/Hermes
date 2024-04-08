@@ -1,6 +1,7 @@
 firebase-admin
 matplotlib
 pandas
+python-dateutil
 seaborn
 st-pages
 streamlit
