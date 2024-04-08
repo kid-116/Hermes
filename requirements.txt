@@ -1,8 +1,8 @@
 benfordslaw
+csvkit
 firebase-admin
 matplotlib
 pandas
-pandera
 python-dateutil
 seaborn
 st-pages

@@ -1,4 +1,6 @@
 import os
+import subprocess
+import tempfile
 from typing import Optional
 from typing import Sequence
 
@@ -10,6 +12,7 @@ from models.projects import ColumnType
 from models.projects import Project
 from models.projects import ProjectSchema
 from models.projects import TableSchema
+from models.views import View
 from . import utils
 
 
@@ -39,6 +42,25 @@ def load_project_tables(project: Project,
                     tables[table_name][column_name] = tables[table_name][column_name].apply(
                         utils.datetime_parser)
     return tables
+
+
+def transform_view_query(query: str) -> str:
+    query = query.strip(';')
+    query = query.replace('\n', ' ').replace('[ ]+', ' ').replace('\t', '')
+    return query
+
+
+def load_advanced_view(project: Project, view: View) -> pd.DataFrame:
+    assert isinstance(view.rules, str)
+    query = transform_view_query(view.rules)
+    with tempfile.NamedTemporaryFile(suffix='.csv') as tmpfile:
+        assert project.schema
+        tables = list(project.schema.keys())
+        table_files = [f'{project.folder}/{table}.csv' for table in tables]
+        cmd = ['csvsql', '--query', query]
+        cmd += table_files
+        subprocess.run(cmd, stdout=tmpfile, check=True)
+        return pd.read_csv(tmpfile.name)
 
 
 def check_if_datetime(column: Sequence[str]) -> bool:

@@ -3,6 +3,7 @@ import streamlit as st
 import constants
 from src import rules
 from src.context import Context
+from src import data_import
 from src.metrics import TableMetrics
 from widgets.disp_metrics import DisplayMetrics
 from widgets.disp_rules import DisplayRules
@@ -10,13 +11,19 @@ from widgets.page import Page
 
 
 def dq_metrics_page() -> None:
-    views = Context.view_db.get_project_views(Context.get_project().id_)
+    views = Context.view_db.get_project_views(Context.get_project().id_, advanced=None)
     options = [f"{view.name} - {view.id_}" for view in views]
     selected_view_name = st.selectbox('Please select a view', options=options)
     if selected_view_name is None:
         return
     _, selected_view_id = selected_view_name.split(' - ')
     selected_view = [view for view in views if view.id_ == selected_view_id][0]
+
+    if selected_view.is_advanced():
+        with st.spinner('Loading ...'):
+            table_df = data_import.load_advanced_view(Context.get_project(), selected_view)
+            st.dataframe(table_df.head(constants.DATAFRAME_DISP_SIZE))
+        return
 
     st.subheader('Rules')
     DisplayRules(selected_view).render()
@@ -25,6 +32,7 @@ def dq_metrics_page() -> None:
     with st.spinner():
         tables = rules.load_views(selected_view).items()
         for table_name, table in tables:
+            st.write(f'##### {table_name}')
             st.dataframe(table.head(constants.DATAFRAME_DISP_SIZE))
 
             project = Context.get_project()
