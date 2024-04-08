@@ -1,23 +1,29 @@
 [[pages]]
 path = 'app.py'
 name = 'Home'
+icon = '🏠'
 
 [[pages]]
 path = 'pages/projects_page.py'
 name = 'Projects'
+icon = '🎞'
 
 [[pages]]
 path = 'pages/import_data_page.py'
 name = 'Data Import'
+icon = '📲'
 
 [[pages]]
 path = 'pages/views_page.py'
 name = 'Views'
+icon = '👁'
 
 [[pages]]
 path = 'pages/advanced_views_page.py'
 name = 'Advanced Views'
+icon = '⤴️'
 
 [[pages]]
 path = 'pages/dq_metrics_page.py'
 name = 'DQ Metrics'
+icon = '📊'
