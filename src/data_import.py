@@ -53,14 +53,14 @@ def transform_view_query(query: str) -> str:
 def load_advanced_view(project: Project, view: View) -> pd.DataFrame:
     assert isinstance(view.rules, str)
     query = transform_view_query(view.rules)
-    with tempfile.NamedTemporaryFile(suffix='.csv') as tmpfile:
+    with tempfile.NamedTemporaryFile(suffix='.csv', mode='w', delete=False) as tmpfile:
         assert project.schema
         tables = list(project.schema.keys())
         table_files = [f'{project.folder}/{table}.csv' for table in tables]
         cmd = ['csvsql', '--query', query]
         cmd += table_files
         subprocess.run(cmd, stdout=tmpfile, check=True)
-        return pd.read_csv(tmpfile.name)
+    return pd.read_csv(tmpfile.name)
 
 
 def check_if_datetime(column: Sequence[str]) -> bool:

@@ -16,8 +16,11 @@ google_oauth2 = streamlit_oauth.OAuth2Component(constants.CLIENT_ID, st.secrets.
 def login() -> Optional[dict[str, str | bool | int]]:
     result = google_oauth2.authorize_button('Login', constants.REDIRECT_URI, constants.SCOPES)
     if result and 'token' in result:
-        userinfo: dict[str, str | bool | int] = id_token.verify_oauth2_token(
-            result['token']['id_token'], requests.Request(), constants.CLIENT_ID)
+        userinfo: dict[str,
+                       str | bool | int] = id_token.verify_oauth2_token(result['token']['id_token'],
+                                                                        requests.Request(),
+                                                                        constants.CLIENT_ID,
+                                                                        clock_skew_in_seconds=10)
         return userinfo
 
     return None
