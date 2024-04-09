@@ -29,10 +29,17 @@
 streamlit run app.py
 ```
 
-If it is not possible to authorize gcloud as show in step above, execute the following:
-```bash
-STREAMLIT_USE_CREDENTIALS=True streamlit run app.py
-```
+Follow the steps below if it is not possible to authorize gcloud as shown above:
+
+- Linux
+  ```bash
+  STREAMLIT_USE_CREDENTIALS=True streamlit run app.py
+  ```
+- Windows
+  ```powershell
+  $env:STREAMLIT_USE_CREDENTIALS="True"
+  streamlit run .\app.py
+  ```
 
 ### Development
 
