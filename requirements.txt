@@ -13,6 +13,7 @@ streamlit-card
 
 # Dev dependencies.
 mypy
+pre-commit
 pylint
 pylint[spelling]
 yapf

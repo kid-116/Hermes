@@ -19,7 +19,11 @@
     cp .stremlit/secrets.toml.sample .streamlit/secrets.toml
     ```
     Now, fill in the secrets.
-4. For test environment, authorize gcloud for the `hermes-415313` project.
+4. Install pre-commit hooks.
+    ```bash
+    pre-commit install    
+    ```
+5. For test environment, authorize gcloud for the `hermes-415313` project.
     ```bash
     gcloud auth application-default login
     ```
